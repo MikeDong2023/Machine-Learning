@@ -85,9 +85,19 @@ TEST(test_min) {
     testTree.insert(15);
     testTree.insert(7);
     testTree.insert(0);
-    ASSERT_TRUE(*testTree.begin() == 0);
-    ASSERT_TRUE(*++testTree.begin() == 5);
-    ASSERT_TRUE(*++++testTree.begin() == 7);
+   ASSERT_TRUE(*testTree.min_element() == 0);
+}
+
+TEST(test_max) {
+    BinarySearchTree<int> testTree;
+    testTree.insert(10);
+    testTree.insert(20);
+    testTree.insert(5);
+    testTree.insert(30);
+    testTree.insert(15);
+    testTree.insert(7);
+    testTree.insert(0);
+    ASSERT_EQUAL(*testTree.max_element(), 30);
 }
 
 TEST(test_check_sorting) {

@@ -453,7 +453,7 @@ private:
   static Node * max_element_impl(Node *node) {
     if (empty_impl(node)) {return nullptr;}
     if (node->right == nullptr) {return node;}
-    return min_element_impl(node->right);
+    return max_element_impl(node->right);
   }
 
 

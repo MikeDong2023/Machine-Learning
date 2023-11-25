@@ -66,6 +66,7 @@ TEST(test_copy_deep_and_shallow) {
 
 TEST(test_find) {
     BinarySearchTree<int> testTree;
+    ASSERT_EQUAL(testTree.find(7), nullptr);
     testTree.insert(10);
     testTree.insert(20);
     testTree.insert(5);
@@ -78,6 +79,7 @@ TEST(test_find) {
 
 TEST(test_min) {
     BinarySearchTree<int> testTree;
+    ASSERT_EQUAL(testTree.min_element(), nullptr);
     testTree.insert(10);
     testTree.insert(20);
     testTree.insert(5);
@@ -90,6 +92,7 @@ TEST(test_min) {
 
 TEST(test_max) {
     BinarySearchTree<int> testTree;
+    ASSERT_EQUAL(testTree.max_element(), nullptr);
     testTree.insert(10);
     testTree.insert(20);
     testTree.insert(5);

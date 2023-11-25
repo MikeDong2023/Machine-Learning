@@ -36,7 +36,7 @@ private:
     Key_compare comp;
     public:
       bool operator() (Pair_type p1, Pair_type p2) {
-        return p1.first < p2.first;
+        return comp(p1.first, p2.first);
       }
   };
 
@@ -106,9 +106,11 @@ public:
   // HINT: http://www.cplusplus.com/reference/map/map/operator[]/
   Value_type& operator[](const Key_type& k) {
     if(mapTree.find({k, Value_type()}) == mapTree.end()) {
-      return *mapTree.insert({k, Value_type()});
+      Pair_type &newPair = *mapTree.insert({k, Value_type()});
+      return newPair.second;
     }
-    return *mapTree.find({k, Value_type()});
+    Pair_type &foundPair = *mapTree.find({k, Value_type()});
+    return foundPair.second;
   };
 
   // MODIFIES: this

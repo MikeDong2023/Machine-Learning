@@ -461,17 +461,17 @@ private:
   //          rooted at 'node'.
   // NOTE:    This function must be tree recursive.
   static bool check_sorting_invariant_impl(const Node *node, Compare less) {
-   if (empty_impl(node)) {
-    return true;
-   }
-   bool currentTree = true;
-   if (node->left != nullptr) {
-    currentTree = less(node->left->datum, node->datum);
-   } 
-   if (currentTree && node->right != nullptr) {
-    currentTree = less(node->datum, node->right->datum);
-   }
-   return currentTree && check_sorting_invariant_impl(node->left, less) && check_sorting_invariant_impl(node->right, less);
+    if (empty_impl(node)) {
+      return true;
+    }
+    bool currentTree = true;
+    if (node->left != nullptr) {
+      currentTree = less(node->left->datum, node->datum);
+    } 
+    if (currentTree && node->right != nullptr) {
+      currentTree = less(node->datum, node->right->datum);
+    }
+    return currentTree && check_sorting_invariant_impl(node->left, less) && check_sorting_invariant_impl(node->right, less);
   }
 
   // EFFECTS : Traverses the tree rooted at 'node' using an in-order traversal,

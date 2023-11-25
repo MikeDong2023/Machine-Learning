@@ -112,6 +112,20 @@ TEST(test_check_sorting) {
     ASSERT_TRUE(testTree.check_sorting_invariant());
     *testTree.begin() = 100;
     ASSERT_FALSE(testTree.check_sorting_invariant());
+    
+}
+TEST(test_check_sorting_duplicate) {
+    BinarySearchTree<int> testTree;
+    testTree.insert(10);
+    testTree.insert(20);
+    testTree.insert(5);
+    testTree.insert(30);
+    testTree.insert(15);
+    testTree.insert(7);
+    testTree.insert(0);
+    testTree.insert(10);
+    ASSERT_FALSE(testTree.check_sorting_invariant());
+    
 }
 
 TEST(test_min_greater_than) {

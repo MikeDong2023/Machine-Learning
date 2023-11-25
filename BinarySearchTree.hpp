@@ -28,6 +28,7 @@ template <typename T,
          >
 class BinarySearchTree {
 
+
   // OVERVIEW: This class represents a binary search tree, storing
   // elements of type T. The Compare functor determines the ordering
   // between elements. The default is std::less<T>, which orders
@@ -364,7 +365,7 @@ private:
     if(empty_impl(node)) {
       return nullptr;
     }
-    Node *newNode = new Node(node->datum, copy_nodes_impl(node), copy_nodes_impl(node));
+    Node *newNode = new Node(node->datum, copy_nodes_impl(node->left), copy_nodes_impl(node->right));
     return newNode;
   }
 
@@ -516,22 +517,14 @@ private:
   //       about where the element you're looking for could be.
   static Node * min_greater_than_impl(Node *node, const T &val, Compare less) {
     if (empty_impl(node)) {return nullptr;}
-    if (less(max_element_impl(node)->datum, val)) {return nullptr;}
-  
-    if (less(node->datum, val)) {
-      min_greater_than_impl(node->right, val, less);
-    }
     if (less(val, node->datum)) {
-      min_greater_than_impl(node->right, val, less);
-    }
-    if (less(val, node->datum)) {
-        Node *left_result = min_greater_than_impl(node->left, val, less);
-        if (left_result != nullptr) {
-            return left_result;
-        }
-        return node;
+      Node *result = min_greater_than_impl(node->left, val, less);
+      if(result != nullptr) {
+        return result;
+      }
+      return node;
     } else {
-        return min_greater_than_impl(node->right, val, less);
+      return min_greater_than_impl(node->right, val, less);
     }
   }
 

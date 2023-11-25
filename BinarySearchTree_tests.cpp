@@ -9,16 +9,28 @@ TEST(test_empty) {
 
 TEST(test_size) {
     BinarySearchTree<int> testTree;
-    ASSERT_TRUE(testTree.size() == 0);
+    ASSERT_EQUAL(0, testTree.size());
+    testTree.insert(10);
+    ASSERT_EQUAL(1, testTree.size());
+    testTree.insert(20);
+    ASSERT_EQUAL(2, testTree.size());
+    testTree.insert(30);
+    ASSERT_EQUAL(3, testTree.size());
+    testTree.insert(15);
+    ASSERT_EQUAL(4, testTree.size());
 }
 
 TEST(test_height) {
     BinarySearchTree<int> testTree;
+    ASSERT_EQUAL(0, testTree.height());
     testTree.insert(10);
+    ASSERT_EQUAL(1, testTree.height());
     testTree.insert(20);
+    ASSERT_EQUAL(2, testTree.height());
     testTree.insert(30);
+    ASSERT_EQUAL(3, testTree.height());
     testTree.insert(15);
-    ASSERT_TRUE(testTree.height() == 3);
+    ASSERT_EQUAL(3, testTree.height());
 }
 
 TEST(test_insert) {

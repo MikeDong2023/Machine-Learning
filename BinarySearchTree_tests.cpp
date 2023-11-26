@@ -9,43 +9,43 @@ TEST(test_empty) {
 
 TEST(test_size) {
     BinarySearchTree<int> testTree;
-    ASSERT_EQUAL(0, testTree.size());
+    ASSERT_EQUAL(0u, testTree.size());
     testTree.insert(10);
-    ASSERT_EQUAL(1, testTree.size());
+    ASSERT_EQUAL(1u, testTree.size());
     testTree.insert(20);
-    ASSERT_EQUAL(2, testTree.size());
+    ASSERT_EQUAL(2u, testTree.size());
     testTree.insert(30);
-    ASSERT_EQUAL(3, testTree.size());
+    ASSERT_EQUAL(3u, testTree.size());
     testTree.insert(15);
-    ASSERT_EQUAL(4, testTree.size());
+    ASSERT_EQUAL(4u, testTree.size());
 }
 
 TEST(test_height) {
     BinarySearchTree<int> testTree;
-    ASSERT_EQUAL(0, testTree.height());
+    ASSERT_EQUAL(0u, testTree.height());
     testTree.insert(10);
-    ASSERT_EQUAL(1, testTree.height());
+    ASSERT_EQUAL(1u, testTree.height());
     testTree.insert(20);
-    ASSERT_EQUAL(2, testTree.height());
+    ASSERT_EQUAL(2u, testTree.height());
     testTree.insert(30);
-    ASSERT_EQUAL(3, testTree.height());
+    ASSERT_EQUAL(3u, testTree.height());
     testTree.insert(15);
-    ASSERT_EQUAL(3, testTree.height());
+    ASSERT_EQUAL(3u, testTree.height());
 }
 
 TEST(test_insert) {
     BinarySearchTree<int> testTree;
     testTree.insert(10);
-    ASSERT_TRUE(testTree.size() == 1);
+    ASSERT_EQUAL(1u, testTree.size());
     testTree.insert(20);
     testTree.insert(5);
-    ASSERT_TRUE(testTree.size() == 3);
+    ASSERT_EQUAL(3u, testTree.size());
     testTree.insert(30);
     testTree.insert(15);
     testTree.insert(7);
     testTree.insert(0);
-    ASSERT_TRUE(testTree.height() == 3);
-    ASSERT_TRUE(testTree.size() == 7);
+    ASSERT_EQUAL(3u, testTree.height());
+    ASSERT_EQUAL(7u, testTree.size());
 }
 
 TEST(test_copy_deep_and_shallow) {
@@ -58,15 +58,15 @@ TEST(test_copy_deep_and_shallow) {
     testTree.insert(7);
     testTree.insert(0);
     BinarySearchTree<int> copyTree(testTree);
-    ASSERT_TRUE(*testTree.begin() == *copyTree.begin());
+    ASSERT_EQUAL(*testTree.begin(), *copyTree.begin());
     testTree.insert(6);
-    ASSERT_TRUE(testTree.size()!= copyTree.size());
+    ASSERT_NOT_EQUAL(testTree.size(), copyTree.size());
 
 }
 
 TEST(test_find) {
     BinarySearchTree<int> testTree;
-    ASSERT_EQUAL(testTree.find(7), nullptr);
+    ASSERT_EQUAL(testTree.find(7), testTree.end());
     testTree.insert(10);
     testTree.insert(20);
     testTree.insert(5);
@@ -79,7 +79,7 @@ TEST(test_find) {
 
 TEST(test_min) {
     BinarySearchTree<int> testTree;
-    ASSERT_EQUAL(testTree.min_element(), nullptr);
+    ASSERT_EQUAL(testTree.min_element(), testTree.end());
     testTree.insert(10);
     testTree.insert(20);
     testTree.insert(5);
@@ -87,12 +87,12 @@ TEST(test_min) {
     testTree.insert(15);
     testTree.insert(7);
     testTree.insert(0);
-   ASSERT_TRUE(*testTree.min_element() == 0);
+   ASSERT_EQUAL(0, *testTree.min_element());
 }
 
 TEST(test_max) {
     BinarySearchTree<int> testTree;
-    ASSERT_EQUAL(testTree.max_element(), nullptr);
+    ASSERT_EQUAL(testTree.max_element(), testTree.end());
     testTree.insert(10);
     testTree.insert(20);
     testTree.insert(5);
@@ -115,7 +115,6 @@ TEST(test_check_sorting) {
     ASSERT_TRUE(testTree.check_sorting_invariant());
     *testTree.begin() = 100;
     ASSERT_FALSE(testTree.check_sorting_invariant());
-    
 }
 TEST(test_check_sorting_duplicate) {
     BinarySearchTree<int> testTree;
@@ -126,9 +125,8 @@ TEST(test_check_sorting_duplicate) {
     testTree.insert(15);
     testTree.insert(7);
     testTree.insert(0);
-    testTree.insert(10);
+    *testTree.begin() = 20;
     ASSERT_FALSE(testTree.check_sorting_invariant());
-    
 }
 
 TEST(test_min_greater_than) {
@@ -140,9 +138,9 @@ TEST(test_min_greater_than) {
     testTree.insert(15);
     testTree.insert(7);
     testTree.insert(0);
-    ASSERT_TRUE(*testTree.min_greater_than(5) == 7);
-    ASSERT_TRUE(*testTree.min_greater_than(15) == 20);
-    ASSERT_TRUE(testTree.min_greater_than(30) == testTree.end());
+    ASSERT_EQUAL(7, *testTree.min_greater_than(5));
+    ASSERT_EQUAL(20, *testTree.min_greater_than(15));
+    ASSERT_EQUAL(testTree.min_greater_than(30), testTree.end());
 }
 
 TEST(test_traverse_inorder) {

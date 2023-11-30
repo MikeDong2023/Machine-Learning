@@ -45,6 +45,14 @@ class Classifier {
                 numPostsWithLabelContainingWord[postLabel][word] += 1;
             }
         }
+        vector<string> alphabetizedLabels(const map<string, int> &labelMap) const {
+            vector<string> labelVec;
+            for(auto it = labelMap.begin(); it != labelMap.end(); ++it) {
+                labelVec.push_back(it->first);
+            }
+            sort(labelVec.begin(), labelVec.end());
+            return labelVec;
+        }
     public:
         Classifier(csvstream &trainingData) {
             map<string, string> post;
@@ -73,9 +81,10 @@ class Classifier {
         }
         double calculateLikelihood(const string &label, const string &contents) const;
         string classifyPost(string &contents) const {
-            string likeliestLabel = numPostsWithLabel.begin()->first;
+            vector<string> labels = alphabetizedLabels(numPostsWithLabel);
+            string likeliestLabel = labels[0];
             //Loop through each label and find the one with the highest likelihood
-            for(const auto & [label, labelCount] : numPostsWithLabel) {
+            for(const string label : labels) {
                 double maxLikelihood = calculateLikelihood(likeliestLabel, contents);
                 if(calculateLikelihood(label, contents) > maxLikelihood) {
                     likeliestLabel = label;

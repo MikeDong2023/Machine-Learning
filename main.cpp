@@ -84,7 +84,7 @@ class Classifier {
             vector<string> labels = alphabetizedLabels(numPostsWithLabel);
             string likeliestLabel = labels[0];
             //Loop through each label and find the one with the highest likelihood
-            for(const string label : labels) {
+            for(const string &label : labels) {
                 double maxLikelihood = calculateLikelihood(likeliestLabel, contents);
                 if(calculateLikelihood(label, contents) > maxLikelihood) {
                     likeliestLabel = label;

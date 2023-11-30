@@ -46,6 +46,12 @@ class Classifier {
             }
         }
     public:
+        Classifier(csvstream &trainingData) {
+            map<string, string> post;
+            while(trainingData >> post) {
+                processPost(post);
+            }
+        }
         /* REQUIRES: post is a map respresenting a Piazza post with 2 pairs:
          * one containing the label, and the other containing the content.
          * MODIFIES: numPosts, numPostsWithLabel, allWords, and

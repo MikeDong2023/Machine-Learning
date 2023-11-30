@@ -69,11 +69,11 @@ class Classifier {
         string classifyPost(string &contents) const {
             string likeliestLabel = numPostsWithLabel.begin()->first;
             //Loop through each label and find the one with the highest likelihood
-            for(const pair p : numPostsWithLabel) {
+            for(const auto & [label, labelCount] : numPostsWithLabel) {
                 double maxLikelihood = calculateLikelihood(likeliestLabel, contents);
-                if(calculateLikelihood(p.first, contents) > maxLikelihood) {
-                    likeliestLabel = p.first;
-                    maxLikelihood = calculateLikelihood(p.first, contents);
+                if(calculateLikelihood(label, contents) > maxLikelihood) {
+                    likeliestLabel = label;
+                    maxLikelihood = calculateLikelihood(label, contents);
                 }
             }
             return likeliestLabel;

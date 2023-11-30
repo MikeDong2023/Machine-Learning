@@ -65,6 +65,17 @@ class Classifier {
         int numUniqueWords() const {
             return allWords.size();
         }
-        int calculateLikelihood(string &label, set<string> postVocab) const;
-        string classifyPost(string &contents) const;
+        double calculateLikelihood(const string &label, const string &contents) const;
+        string classifyPost(string &contents) const {
+            string likeliestLabel = numPostsWithLabel.begin()->first;
+            //Loop through each label and find the one with the highest likelihood
+            for(const pair p : numPostsWithLabel) {
+                double maxLikelihood = calculateLikelihood(likeliestLabel, contents);
+                if(calculateLikelihood(p.first, contents) > maxLikelihood) {
+                    likeliestLabel = p.first;
+                    maxLikelihood = calculateLikelihood(p.first, contents);
+                }
+            }
+            return likeliestLabel;
+        };
 };

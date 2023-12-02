@@ -15,7 +15,7 @@ class Classifier {
          * posts.
          */
         map<string, map<string, int>> numPostsWithLabelContainingWord;
-        int numPosts;
+        int numPosts = 0;//fixed?nope
 
         /* MODIFIES: allWords, numPostsContainingWord,
          * and numPostsWithLabelContainingWord.
@@ -76,6 +76,7 @@ class Classifier {
          */
         void processPost(std::map<string, string> &post) {
             ++numPosts;
+            //cout << numPosts << endl;
             numPostsWithLabel[post["tag"]] += 1;
             istringstream postBody(post["content"]);
             string word;
@@ -97,25 +98,37 @@ class Classifier {
             return numPostsWithLabelContainingWord[label][word];
         }
         double calculateLogPrior(const string &label) {
-            return log(numPostsWithLabel[label]/numPosts);
+            //cout << numPostsWithLabel[label] << endl;
+            //cout << numPosts << endl;
+            return log(static_cast<double>(numPostsWithLabel[label])/numPosts);
         }
         
         double calculateLogLikelihood(const string &label, const string &word) {
-            if(numPostsContainingWord[word] == 0) {
-                return log(1/numPosts);
+            if(numPostsContainingWord[word] == 0 ) {
+                return log(1/static_cast<double>(numPosts));
             }
             if(numPostsWithLabelContainingWord[label][word] == 0) {
-                return log(numPostsContainingWord[word]/numPosts);
+                return log(static_cast<double>(numPostsContainingWord[word])/numPosts);
             }
-            return log(numPostsWithLabelContainingWord[label][word]/
+            
+            /*cout << numPostsWithLabelContainingWord[label][word] << endl;
+            cout << numPostsWithLabel[label] << endl;
+            cout << log(static_cast<double>(numPostsWithLabelContainingWord[label][word])/
+                numPostsWithLabel[label]) << endl;
+
+            cout << endl;*/
+            return log(static_cast<double>(numPostsWithLabelContainingWord[label][word])/
                 numPostsWithLabel[label]);
         }
         double calculateLikelihood(const string &label, const string &contents) {
             //Calculate log-prior [ln P(C)]
             double probability = calculateLogPrior(label);
+            //cout << probability << endl;
             set<string> wordBag = uniqueWords(contents);
             for(const string &word : wordBag) {
+               // cout << calculateLikelihood(label, word) << endl;
                 probability += calculateLogLikelihood(label, word);
+               // cout << probability << endl;
             }
             return probability;
         }
@@ -123,9 +136,11 @@ class Classifier {
         string classifyPost(string &contents) {
             vector<string> labels = alphabetizedLabels();
             string likeliestLabel = labels[0];
+            double maxLikelihood = calculateLikelihood(likeliestLabel, contents);
+            
             //Loop through each label and find the one with the highest likelihood
             for(const string &label : labels) {
-                double maxLikelihood = calculateLikelihood(likeliestLabel, contents);
+                
                 if(calculateLikelihood(label, contents) > maxLikelihood) {
                     likeliestLabel = label;
                     maxLikelihood = calculateLikelihood(label, contents);
@@ -160,13 +175,15 @@ int main(int argc, char* argv[]) {
     Classifier sortBot(trainFile);
     if (argc == 4) {
         cout << "training data:" << endl;
-        map<string,string> trainPrint;
+        std::map<string,string> trainPrint;
+        cout << "hi";
         while(trainFile >> trainPrint) {
-            cout << "\tlabel = " << trainPrint["tag"] << ", content = ";
+            cout << "hello" ;
+            cout << "  label = " << trainPrint["tag"] << ", content = ";
             cout << trainPrint["content"] << endl;
         }
     }
-    cout << "trained on " << sortBot.pussyCat() << "examples";
+    cout << "trained on " << sortBot.pussyCat() << " examples" << endl;
     if(argc == 4) {
         cout << "vocabulary size = " << sortBot.numUniqueWords() << endl;
     }
@@ -175,14 +192,14 @@ int main(int argc, char* argv[]) {
     if(argc == 4) {
         cout << "classes: " << endl;
         for(const string &tag : labels) {
-            cout << "\t" << tag << ", " << sortBot.labelledPostsWithWord(tag) 
+            cout << "  " << tag << ", " << sortBot.labelledPostsWithWord(tag) 
             << " examples, log-prior = " << sortBot.calculateLogPrior(tag) << endl;
         }
         cout << "classifier parameters:" << endl;
         for(const string &tag : labels) {
             vector<string> associatedWords = sortBot.alphabetizedWords(tag);
             for(string &word : associatedWords) {
-                cout << "\t" << tag << ":" << word << ", count = " << 
+                cout << "  " << tag << ":" << word << ", count = " << 
                 sortBot.labelWordMap(tag, word) << ", log-likelihood = " 
                 << sortBot.calculateLogLikelihood(tag, word) << endl;
             }
@@ -195,12 +212,12 @@ int main(int argc, char* argv[]) {
     std::map <string, string> testFile;
     while (testStream >> testFile) {
         ++numPosts;
-        string predictedLabel = sortBot.classifyPost(testFile["contents"]);
+        string predictedLabel = sortBot.classifyPost(testFile["content"]);
         if(predictedLabel == testFile["tag"]) ++numCorrect;
-        cout << "\tcorrect = " << testFile["tag"] << ", predicted = ";
-        cout << predictedLabel << ", log-probability score =";
-        cout << sortBot.calculateLikelihood(predictedLabel, testFile["contents"]) << endl;
-        cout << "\tcontents = " << testFile["contents"] << endl;
+        cout << "  correct = " << testFile["tag"] << ", predicted = ";
+        cout << predictedLabel << ", log-probability score = ";
+        cout << sortBot.calculateLikelihood(predictedLabel, testFile["content"]) << endl;
+        cout << "  contents = " << testFile["content"] << endl;//fixed no ouput 
         cout << endl;
     }
     cout << "performance: " << numCorrect << " / " << numPosts << " posts predicted correctly\n";
